@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Color palette */
+  --color-primary: 23 23 23; /* neutral-900 */
+  --color-primary-light: 197 165 114; /* gold */
+  --color-primary-dark: 3 7 18; /* neutral-950 */
+  
+  --color-secondary: 17 24 39; /* neutral-900 */
+  --color-secondary-light: 55 65 81; /* neutral-700 */
+  --color-secondary-dark: 3 7 18; /* neutral-950 */
+
+  --color-accent: 197 165 114; /* gold */
+  --color-success: 22 163 74; /* green-600 */
+  --color-warning: 217 119 6; /* amber-600 */
+  --color-error: 220 38 38; /* red-600 */
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply font-outfit bg-neutral-950 text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-gold text-neutral-900 hover:bg-gold/90 focus:ring-gold/50;
+  }
+
+  .btn-secondary {
+    @apply bg-neutral-800 text-white hover:bg-neutral-700 focus:ring-neutral-900/50;
+  }
+
+  .btn-outline {
+    @apply border border-gold text-gold hover:bg-gold hover:text-neutral-900 focus:ring-gold/50;
+  }
+
+  .container-custom {
+    @apply container mx-auto px-4 md:px-6 lg:px-8;
+  }
+
+  .section-with-ropes {
+    @apply relative overflow-hidden;
+    background-image: linear-gradient(to bottom, rgba(23, 23, 23, 0.95), rgba(23, 23, 23, 0.95)),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 28h-2v-4h-4v4h-4v-4h-4v4h-4v-4h-4v4h-4v-4h-4v4h-4v-4h-4v4h-4v-4H6v4H4v4h2v4h4v-4h4v4h4v-4h4v4h4v-4h4v4h4v-4h4v4h4v-4h4v4h4v-4h2v-4zm-4 0h-4v-4h4v4zm-28 0h-4v-4h4v4zm8 0h-4v-4h4v4zm8 0h-4v-4h4v4zm8 0h-4v-4h4v4z' fill='rgba(197, 165, 114, 0.1)' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+}
+
+.canvas-container {
+  @apply w-full h-full;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gold rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gold/80;
+}
+
+/* Font family */
+.font-outfit {
+  font-family: 'Outfit', sans-serif;
+}
