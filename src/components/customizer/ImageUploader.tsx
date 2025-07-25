@@ -10,7 +10,6 @@ import {
   Loader2,
 } from "lucide-react";
 import type { Zone, ImageTransform } from "../../store/customizationStore";
-import imageCompression from "browser-image-compression";
 
 const AVAILABLE_ZONES = ["OutterPalm", "OutterThumb", "Strap"] as const;
 type AvailableZone = (typeof AVAILABLE_ZONES)[number];
@@ -62,45 +61,27 @@ export default function ImageUploader() {
     await processFile(file);
   };
 
+  // ImageUploader.tsx (simplified)
   const processFile = async (file: File) => {
-    try {
-      setUploadStatus({ message: "Optimizing image...", type: "loading" });
+    const MAX_SIZE_MB = isMobile ? 2 : 5; // 2MB mobile limit
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
-      const options = {
-        maxSizeMB: isMobile ? 1.5 : 5,
-        maxWidthOrHeight: isMobile ? 800 : 1024,
-        useWebWorker: true,
-        fileType: "image/webp",
-      };
-
-      const compressedFile = await imageCompression(file, options);
-
-      if (compressedFile.size > 5 * 1024 * 1024) {
-        throw new Error(
-          `Image exceeds ${isMobile ? "1.5MB" : "5MB"} limit after compression`
-        );
-      }
-
+    if (file.size > MAX_SIZE_BYTES) {
       setUploadStatus({
-        message: "Uploading to Cloudinary...",
-        type: "loading",
-      });
-      const url = await uploadToCloudinary(compressedFile);
-
-      if (!url) throw new Error("Upload failed");
-
-      addCustomImage(selectedZone, url);
-      setUploadStatus({
-        message: "Image uploaded successfully!",
-        type: "success",
-      });
-    } catch (error) {
-      console.error("Upload error:", error);
-      setUploadStatus({
-        message:
-          error instanceof Error ? error.message : "Failed to process image",
+        message: `Image exceeds ${MAX_SIZE_MB}MB limit`,
         type: "error",
       });
+      return;
+    }
+
+    setUploadStatus({ message: "Uploading...", type: "loading" });
+
+    const url = await uploadToCloudinary(file); // Direct upload without compression
+    if (url) {
+      addCustomImage(selectedZone, url);
+      setUploadStatus({ message: "Upload successful!", type: "success" });
+    } else {
+      setUploadStatus({ message: "Upload failed", type: "error" });
     }
   };
 
@@ -205,7 +186,7 @@ export default function ImageUploader() {
                 : "Drag & drop or click to browse"}
             </p>
             <p className="text-xs text-neutral-500">
-              Max {isMobile ? "1.5MB" : "5MB"} • WebP recommended
+              Max {isMobile ? "2MB" : "5MB"} • WebP recommended
             </p>
           </div>
         </div>

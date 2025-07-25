@@ -1,9 +1,9 @@
-export const uploadToCloudinary = async (file: File) => {
+export const uploadToCloudinary = async (
+  file: File
+): Promise<string | null> => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", "glove_upload");
-  formData.append("quality", "auto:good"); // Cloudinary auto-quality
-  formData.append("format", "webp"); // Force modern format
 
   try {
     const res = await fetch(
@@ -13,9 +13,10 @@ export const uploadToCloudinary = async (file: File) => {
         body: formData,
       }
     );
-    return res.json().then((data) => data.secure_url);
+    const data = await res.json();
+    return data.secure_url;
   } catch (error) {
-    console.error("Cloudinary upload failed:", error);
+    console.error("Erreur Cloudinary:", error);
     return null;
   }
 };
