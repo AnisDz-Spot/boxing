@@ -4,6 +4,8 @@ export const uploadToCloudinary = async (
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", "glove_upload");
+  formData.append("quality", "auto:best");
+  formData.append("flags", "lossless");
 
   try {
     const res = await fetch(

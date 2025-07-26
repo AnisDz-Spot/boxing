@@ -212,14 +212,13 @@ export default function ImageUploader() {
                 key={image.id}
                 className="bg-neutral-900 rounded-lg p-4 space-y-4"
               >
-                <div className="relative border border-dashed border-gray-400 rounded-md p-2 mb-3">
+                <div className="relative border-2 border-dashed border-neutral-600 rounded-lg overflow-hidden">
                   <img
                     src={image.url}
                     className="mx-auto"
                     style={{
-                      maxWidth: "100%",
-                      height: "auto",
-                      objectFit: "contain",
+                      imageRendering: "-webkit-optimize-contrast",
+                      backgroundSize: "contain",
                     }}
                     alt="Design preview"
                   />

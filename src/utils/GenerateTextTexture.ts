@@ -26,13 +26,13 @@ export async function generateTextTexture({
   images = [],
   scale = 1.0, // Default scale factor
 }: TextOptions): Promise<THREE.Texture> {
+  const resolutionMultiplier = 2;
   const canvas = document.createElement("canvas");
-  // Apply scale to canvas dimensions for sharper results
-  canvas.width = canvas.height = 512 * scale;
+  canvas.width = canvas.height = 512 * resolutionMultiplier;
   const ctx = canvas.getContext("2d")!;
 
   // Scale the context to maintain coordinate system
-  ctx.scale(scale, scale);
+  ctx.scale(resolutionMultiplier, resolutionMultiplier);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Background (scaled)
@@ -75,6 +75,7 @@ export async function generateTextTexture({
   }
 
   const texture = new THREE.CanvasTexture(canvas);
+  texture.anisotropy = 16;
   texture.flipY = false;
   texture.needsUpdate = true;
 

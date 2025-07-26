@@ -40,6 +40,7 @@ const GloveModel: React.FC = () => {
             });
 
             // Critical changes to prevent stretching:
+            texture.anisotropy = 16;
             texture.wrapS = THREE.ClampToEdgeWrapping;
             texture.wrapT = THREE.ClampToEdgeWrapping;
             texture.repeat.set(1, 1);
