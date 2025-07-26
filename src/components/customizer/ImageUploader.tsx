@@ -9,7 +9,7 @@ import {
   Maximize,
   Loader2,
 } from "lucide-react";
-import type { Zone, ImageTransform } from "../../store/customizationStore";
+import type { ImageTransform } from "../../store/customizationStore";
 
 const AVAILABLE_ZONES = ["OutterPalm", "OutterThumb", "Strap"] as const;
 type AvailableZone = (typeof AVAILABLE_ZONES)[number];
@@ -19,6 +19,7 @@ const ZONE_LABELS: Record<AvailableZone, string> = {
   OutterThumb: "Outer Thumb",
   Strap: "Strap",
 };
+const isMobile = window.innerWidth < 768;
 
 export default function ImageUploader() {
   const {
@@ -93,10 +94,16 @@ export default function ImageUploader() {
     const image = customImages[selectedZone].find((img) => img.id === imageId);
     if (!image) return;
 
-    updateImageTransform(selectedZone, imageId, {
-      ...image.transform,
-      [property]: value,
-    });
+    // Calculate proportional scaling if needed
+    let newTransform = { ...image.transform };
+    newTransform[property] = value;
+
+    // Enforce max scale limit (optional)
+    if (property === "scale") {
+      newTransform.scale = Math.min(Math.max(value, 0.1), 1.5); // Limit scale range
+    }
+
+    updateImageTransform(selectedZone, imageId, newTransform);
   };
 
   return (
@@ -295,7 +302,7 @@ const TransformControls = ({
       icon={<Maximize className="h-4 w-4 text-gold" />}
       value={transform.scale}
       min={0.1}
-      max={2}
+      max={isMobile ? 1.0 : 1.5}
       step={0.1}
       onChange={(v) => onChange("scale", v)}
     />

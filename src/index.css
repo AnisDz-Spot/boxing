@@ -7,7 +7,7 @@
   --color-primary: 23 23 23; /* neutral-900 */
   --color-primary-light: 197 165 114; /* gold */
   --color-primary-dark: 3 7 18; /* neutral-950 */
-  
+
   --color-secondary: 17 24 39; /* neutral-900 */
   --color-secondary-light: 55 65 81; /* neutral-700 */
   --color-secondary-dark: 3 7 18; /* neutral-950 */
@@ -22,12 +22,17 @@
   html {
     @apply scroll-smooth;
   }
-  
+
   body {
     @apply font-outfit bg-neutral-950 text-white;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold tracking-tight;
   }
 
@@ -71,7 +76,11 @@
 
   .section-with-ropes {
     @apply relative overflow-hidden;
-    background-image: linear-gradient(to bottom, rgba(23, 23, 23, 0.95), rgba(23, 23, 23, 0.95)),
+    background-image: linear-gradient(
+        to bottom,
+        rgba(23, 23, 23, 0.95),
+        rgba(23, 23, 23, 0.95)
+      ),
       url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 28h-2v-4h-4v4h-4v-4h-4v4h-4v-4h-4v4h-4v-4h-4v4h-4v-4h-4v4h-4v-4H6v4H4v4h2v4h4v-4h4v4h4v-4h4v4h4v-4h4v4h4v-4h4v4h4v-4h4v4h4v-4h2v-4zm-4 0h-4v-4h4v4zm-28 0h-4v-4h4v4zm8 0h-4v-4h4v4zm8 0h-4v-4h4v4zm8 0h-4v-4h4v4z' fill='rgba(197, 165, 114, 0.1)' fill-rule='evenodd'/%3E%3C/svg%3E");
   }
 }
@@ -99,5 +108,9 @@
 
 /* Font family */
 .font-outfit {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
+}
+
+.glove-container {
+  touch-action: pan-x pan-y;
 }

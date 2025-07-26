@@ -1,37 +1,51 @@
-import React, { useRef, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
-import { useCustomizationStore } from '../../store/customizationStore';
-import { generateTextTexture } from '../../utils/GenerateTextTexture';
+import React, { useRef, useEffect } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import * as THREE from "three";
+import { useCustomizationStore } from "../../store/customizationStore";
+import { generateTextTexture } from "../../utils/GenerateTextTexture";
 
 const GloveModel: React.FC = () => {
   const group = useRef<THREE.Group>(null);
   const { glove, customImages } = useCustomizationStore();
-  const { scene } = useGLTF('/models/glove.glb');
+  const { scene } = useGLTF("/models/glove.glb");
+  const isMobile = window.innerWidth < 768;
 
   useFrame((state) => {
     if (group.current) {
-      const targetRotation = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1; 
-      group.current.rotation.y += (targetRotation - group.current.rotation.y) * 0.05;
+      const targetRotation = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
+      group.current.rotation.y +=
+        (targetRotation - group.current.rotation.y) * 0.05;
     }
   });
 
   useEffect(() => {
     const applyMaterials = async () => {
-      const applyColor = async (name: string, color: string, images: any[] = []) => {
+      const applyColor = async (
+        name: string,
+        color: string,
+        images: any[] = []
+      ) => {
         const mesh = scene.getObjectByName(name) as THREE.Mesh;
-        if (mesh && mesh.material && 'color' in mesh.material) {
+        if (mesh && mesh.material && "color" in mesh.material) {
           const material = mesh.material as THREE.MeshStandardMaterial;
           material.color.set(color);
 
           // Apply images if they exist for this part
           if (images.length > 0) {
             const texture = await generateTextTexture({
-              text: '',
+              text: "",
               bgColor: color,
-              images: images
+              images: images,
+              scale: isMobile ? 0.8 : 1.2, // Reduce scale on mobile
             });
+            // Add these lines to preserve aspect ratio
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(1, 1); // Maintain original proportions
+
+            material.map = texture;
+            material.needsUpdate = true;
             material.map = texture;
           } else {
             material.map = null;
@@ -42,15 +56,27 @@ const GloveModel: React.FC = () => {
       };
 
       // Apply colors and images to each part
-      await applyColor('Fingers', glove.fingersColor.hex);
-      await applyColor('Inner Palm', glove.innerPalmColor.hex);
-      await applyColor('Outer Palm', glove.outerPalmColor.hex, customImages.OutterPalm);
-      await applyColor('Inner Thumb', glove.innerThumbColor.hex);
-      await applyColor('Outer Thumb', glove.outerThumbColor.hex, customImages.OutterThumb);
-      await applyColor('Strap', glove.strapColor.hex, customImages.Strap);
-      await applyColor('Wrist', glove.wristColor.hex);
-      await applyColor('Wrist Outline', glove.wristOutlineColor.hex, customImages.WristOutline);
-      await applyColor('Outline', glove.outlineColor.hex);
+      await applyColor("Fingers", glove.fingersColor.hex);
+      await applyColor("Inner Palm", glove.innerPalmColor.hex);
+      await applyColor(
+        "Outer Palm",
+        glove.outerPalmColor.hex,
+        customImages.OutterPalm
+      );
+      await applyColor("Inner Thumb", glove.innerThumbColor.hex);
+      await applyColor(
+        "Outer Thumb",
+        glove.outerThumbColor.hex,
+        customImages.OutterThumb
+      );
+      await applyColor("Strap", glove.strapColor.hex, customImages.Strap);
+      await applyColor("Wrist", glove.wristColor.hex);
+      await applyColor(
+        "Wrist Outline",
+        glove.wristOutlineColor.hex,
+        customImages.WristOutline
+      );
+      await applyColor("Outline", glove.outlineColor.hex);
     };
 
     applyMaterials();
@@ -65,4 +91,4 @@ const GloveModel: React.FC = () => {
 
 export default GloveModel;
 
-useGLTF.preload('/models/glove.glb');
+useGLTF.preload("/models/glove.glb");
