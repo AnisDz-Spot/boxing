@@ -31,15 +31,15 @@ const GloveModel: React.FC = () => {
           const material = mesh.material as THREE.MeshStandardMaterial;
           material.color.set(color);
 
-          // Apply images if they exist for this part
           if (images.length > 0) {
             const texture = await generateTextTexture({
               text: "",
               bgColor: color,
               images: images,
-              scale: isMobile ? 0.8 : 1.2,
+              scale: isMobile ? 0.7 : 1.0,
             });
 
+            // Critical changes to prevent stretching:
             texture.wrapS = THREE.ClampToEdgeWrapping;
             texture.wrapT = THREE.ClampToEdgeWrapping;
             texture.repeat.set(1, 1);
@@ -47,7 +47,6 @@ const GloveModel: React.FC = () => {
 
             material.map = texture;
             material.map.minFilter = THREE.LinearFilter;
-            material.map.magFilter = THREE.LinearFilter;
             material.needsUpdate = true;
           } else {
             material.map = null;

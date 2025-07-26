@@ -41,20 +41,20 @@ export async function generateTextTexture({
   ctx.fillRect(0, 0, canvas.width / scale, canvas.height / scale); // Adjust for scaling
   ctx.restore();
 
-  // Images with proper scaling
   for (const image of images) {
     const img = await loadImage(image.url);
     const { x, y, scale, rotation } = image.transform;
 
-    // Calculate aspect ratio-preserving dimensions
-    const imgAspect = img.width / img.height;
-    const drawWidth = 256 * scale;
-    const drawHeight = drawWidth / imgAspect;
+    // Calculate contained dimensions
+    const maxSize = 200; // Maximum display size
+    const ratio = Math.min(maxSize / img.width, maxSize / img.height);
+    const width = img.width * ratio * scale;
+    const height = img.height * ratio * scale;
 
     ctx.save();
     ctx.translate(x + 256, y + 256);
     ctx.rotate((rotation * Math.PI) / 180);
-    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+    ctx.drawImage(img, -width / 2, -height / 2, width, height);
     ctx.restore();
   }
 

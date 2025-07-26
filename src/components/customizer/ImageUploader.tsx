@@ -212,11 +212,16 @@ export default function ImageUploader() {
                 key={image.id}
                 className="bg-neutral-900 rounded-lg p-4 space-y-4"
               >
-                <div className="relative">
+                <div className="relative border border-dashed border-gray-400 rounded-md p-2 mb-3">
                   <img
                     src={image.url}
-                    alt="Custom design"
-                    className="w-full rounded-lg border border-neutral-600"
+                    className="mx-auto"
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      objectFit: "contain",
+                    }}
+                    alt="Design preview"
                   />
                   <button
                     onClick={() => removeCustomImage(selectedZone, image.id)}
@@ -224,6 +229,7 @@ export default function ImageUploader() {
                   >
                     <X className="h-4 w-4" />
                   </button>
+                  <div className="absolute inset-0 border-2 border-yellow-400 pointer-events-none" />
                 </div>
 
                 {/* Transform Controls */}
@@ -302,12 +308,9 @@ const TransformControls = ({
       icon={<Maximize className="h-4 w-4 text-gold" />}
       value={transform.scale}
       min={0.1}
-      max={isMobile ? 1.0 : 1.5}
+      max={isMobile ? 0.8 : 1.2}
       step={0.05}
-      onChange={(v) => {
-        const newScale = Math.min(Math.max(v, 0.1), isMobile ? 1.0 : 1.5);
-        onChange("scale", newScale);
-      }}
+      onChange={(v) => onChange("scale", v)}
     />
   </>
 );
