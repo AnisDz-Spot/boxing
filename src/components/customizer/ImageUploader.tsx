@@ -303,8 +303,11 @@ const TransformControls = ({
       value={transform.scale}
       min={0.1}
       max={isMobile ? 1.0 : 1.5}
-      step={0.1}
-      onChange={(v) => onChange("scale", v)}
+      step={0.05}
+      onChange={(v) => {
+        const newScale = Math.min(Math.max(v, 0.1), isMobile ? 1.0 : 1.5);
+        onChange("scale", newScale);
+      }}
     />
   </>
 );

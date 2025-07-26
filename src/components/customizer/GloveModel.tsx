@@ -37,16 +37,18 @@ const GloveModel: React.FC = () => {
               text: "",
               bgColor: color,
               images: images,
-              scale: isMobile ? 0.8 : 1.2, // Reduce scale on mobile
+              scale: isMobile ? 0.8 : 1.2,
             });
-            // Add these lines to preserve aspect ratio
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(1, 1); // Maintain original proportions
+
+            texture.wrapS = THREE.ClampToEdgeWrapping;
+            texture.wrapT = THREE.ClampToEdgeWrapping;
+            texture.repeat.set(1, 1);
+            texture.offset.set(0, 0);
 
             material.map = texture;
+            material.map.minFilter = THREE.LinearFilter;
+            material.map.magFilter = THREE.LinearFilter;
             material.needsUpdate = true;
-            material.map = texture;
           } else {
             material.map = null;
           }

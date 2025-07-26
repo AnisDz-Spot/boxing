@@ -44,18 +44,17 @@ export async function generateTextTexture({
   // Images with proper scaling
   for (const image of images) {
     const img = await loadImage(image.url);
-    const {
-      x: imgX,
-      y: imgY,
-      scale: imgScale,
-      rotation: imgRotation,
-    } = image.transform;
+    const { x, y, scale, rotation } = image.transform;
+
+    // Calculate aspect ratio-preserving dimensions
+    const imgAspect = img.width / img.height;
+    const drawWidth = 256 * scale;
+    const drawHeight = drawWidth / imgAspect;
 
     ctx.save();
-    ctx.translate((imgX + 256) * scale, (imgY + 256) * scale);
-    ctx.rotate((imgRotation * Math.PI) / 180);
-    ctx.scale(imgScale * scale, imgScale * scale); // Combine transforms
-    ctx.drawImage(img, -img.width / 2, -img.height / 2, img.width, img.height);
+    ctx.translate(x + 256, y + 256);
+    ctx.rotate((rotation * Math.PI) / 180);
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
     ctx.restore();
   }
 
